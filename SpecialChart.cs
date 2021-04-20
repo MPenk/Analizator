@@ -52,6 +52,7 @@ namespace Analizator
             this.chart.Legends.Add("legend");
             this.chart.Legends["legend"].BorderDashStyle = ChartDashStyle.Dash;
             this.chart.Legends["legend"].BackColor = Color.Transparent;
+            this.chart.BackColor = SystemColors.Control;
 
             FillChartWithNewData(this.data, this.chart.ChartAreas["area"], this.chart.Series["data"], this.chart.Series["average"], this.chart.Series["dataPoint"]);
         }
@@ -95,6 +96,7 @@ namespace Analizator
 
             //Ustaawienie legendy
             seriesData.LegendText = "Wyniki";
+            seriesDataPoint.LegendText = "Wyniki";
             seriesAverage.LegendText = "Średnia";
             seriesDataPoint.IsVisibleInLegend = false;
 
@@ -158,6 +160,25 @@ namespace Analizator
                 this.chart.Series[what].Enabled = true;
             else
                 this.chart.Series[what].Enabled = false;
+        }
+
+        public void IsVisibleInLegend(string what, bool visible) 
+        {
+            if (visible)
+                this.chart.Series[what].IsVisibleInLegend = true;
+            else
+                this.chart.Series[what].IsVisibleInLegend = false;
+        }
+        public void SaveToImg(String path) 
+        {
+            try
+            {
+                this.chart.SaveImage(path, ChartImageFormat.Png);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
     }

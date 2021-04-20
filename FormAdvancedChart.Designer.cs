@@ -38,6 +38,9 @@
             this.tblSettingData = new System.Windows.Forms.TableLayoutPanel();
             this.cboxData = new System.Windows.Forms.CheckBox();
             this.cboData = new System.Windows.Forms.ComboBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.cboxDataLine = new System.Windows.Forms.CheckBox();
+            this.lblDataLine = new System.Windows.Forms.Label();
             this.tblSettingYInterval = new System.Windows.Forms.TableLayoutPanel();
             this.tblYIntervalAuto = new System.Windows.Forms.TableLayoutPanel();
             this.lblYIntervalText1 = new System.Windows.Forms.Label();
@@ -53,17 +56,21 @@
             this.lblYMinValueText = new System.Windows.Forms.Label();
             this.tboxYMinValue = new System.Windows.Forms.TextBox();
             this.lblYMinERROR = new System.Windows.Forms.Label();
+            this.tblImportToImg = new System.Windows.Forms.TableLayoutPanel();
+            this.btnSaveToImg = new System.Windows.Forms.Button();
             this.tblMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartFromData)).BeginInit();
             this.tblChartSettings.SuspendLayout();
             this.tblSettingAverage.SuspendLayout();
             this.tblSettingData.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.tblSettingYInterval.SuspendLayout();
             this.tblYIntervalAuto.SuspendLayout();
             this.tblYIntervalValue.SuspendLayout();
             this.tblSettingsYMin.SuspendLayout();
             this.tblYMinText.SuspendLayout();
             this.tblYMinValue.SuspendLayout();
+            this.tblImportToImg.SuspendLayout();
             this.SuspendLayout();
             // 
             // tblMain
@@ -101,16 +108,18 @@
             this.tblChartSettings.Controls.Add(this.tblSettingData, 0, 0);
             this.tblChartSettings.Controls.Add(this.tblSettingYInterval, 0, 2);
             this.tblChartSettings.Controls.Add(this.tblSettingsYMin, 0, 3);
+            this.tblChartSettings.Controls.Add(this.tblImportToImg, 0, 4);
             this.tblChartSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblChartSettings.Location = new System.Drawing.Point(710, 3);
             this.tblChartSettings.MinimumSize = new System.Drawing.Size(50, 100);
             this.tblChartSettings.Name = "tblChartSettings";
-            this.tblChartSettings.RowCount = 5;
+            this.tblChartSettings.RowCount = 6;
             this.tblChartSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tblChartSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tblChartSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tblChartSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tblChartSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblChartSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tblChartSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tblChartSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tblChartSettings.Size = new System.Drawing.Size(161, 614);
@@ -125,7 +134,7 @@
             this.tblSettingAverage.Controls.Add(this.cboxAverage, 0, 0);
             this.tblSettingAverage.Controls.Add(this.cboAverage, 0, 1);
             this.tblSettingAverage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblSettingAverage.Location = new System.Drawing.Point(4, 61);
+            this.tblSettingAverage.Location = new System.Drawing.Point(4, 81);
             this.tblSettingAverage.Name = "tblSettingAverage";
             this.tblSettingAverage.RowCount = 2;
             this.tblSettingAverage.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -167,14 +176,17 @@
             this.tblSettingData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tblSettingData.Controls.Add(this.cboxData, 0, 0);
             this.tblSettingData.Controls.Add(this.cboData, 0, 1);
+            this.tblSettingData.Controls.Add(this.tableLayoutPanel1, 0, 2);
             this.tblSettingData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblSettingData.Location = new System.Drawing.Point(4, 4);
             this.tblSettingData.Name = "tblSettingData";
-            this.tblSettingData.RowCount = 2;
+            this.tblSettingData.RowCount = 3;
             this.tblSettingData.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tblSettingData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblSettingData.Size = new System.Drawing.Size(155, 50);
+            this.tblSettingData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tblSettingData.Size = new System.Drawing.Size(155, 70);
             this.tblSettingData.TabIndex = 4;
+            this.tblSettingData.Paint += new System.Windows.Forms.PaintEventHandler(this.tblSettingData_Paint);
             // 
             // cboxData
             // 
@@ -201,6 +213,47 @@
             this.cboData.TabIndex = 1;
             this.cboData.SelectionChangeCommitted += new System.EventHandler(this.cbo_SelectionChangeCommitted);
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Controls.Add(this.cboxDataLine, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lblDataLine, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 53);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(149, 14);
+            this.tableLayoutPanel1.TabIndex = 7;
+            // 
+            // cboxDataLine
+            // 
+            this.cboxDataLine.AutoSize = true;
+            this.cboxDataLine.Checked = true;
+            this.cboxDataLine.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cboxDataLine.Dock = System.Windows.Forms.DockStyle.Right;
+            this.cboxDataLine.Location = new System.Drawing.Point(134, 0);
+            this.cboxDataLine.Margin = new System.Windows.Forms.Padding(0);
+            this.cboxDataLine.Name = "cboxDataLine";
+            this.cboxDataLine.Size = new System.Drawing.Size(15, 14);
+            this.cboxDataLine.TabIndex = 0;
+            this.cboxDataLine.UseVisualStyleBackColor = true;
+            this.cboxDataLine.CheckedChanged += new System.EventHandler(this.cboxDataLine_CheckedChanged);
+            // 
+            // lblDataLine
+            // 
+            this.lblDataLine.AutoSize = true;
+            this.lblDataLine.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblDataLine.Location = new System.Drawing.Point(3, 0);
+            this.lblDataLine.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.lblDataLine.Name = "lblDataLine";
+            this.lblDataLine.Size = new System.Drawing.Size(80, 14);
+            this.lblDataLine.TabIndex = 1;
+            this.lblDataLine.Text = "Połączone linią";
+            // 
             // tblSettingYInterval
             // 
             this.tblSettingYInterval.AutoSize = true;
@@ -210,7 +263,7 @@
             this.tblSettingYInterval.Controls.Add(this.tblYIntervalValue, 0, 1);
             this.tblSettingYInterval.Controls.Add(this.lblYIntervalERROR, 0, 2);
             this.tblSettingYInterval.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblSettingYInterval.Location = new System.Drawing.Point(4, 112);
+            this.tblSettingYInterval.Location = new System.Drawing.Point(4, 132);
             this.tblSettingYInterval.Name = "tblSettingYInterval";
             this.tblSettingYInterval.RowCount = 3;
             this.tblSettingYInterval.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -322,7 +375,7 @@
             this.tblSettingsYMin.Controls.Add(this.tblYMinValue, 0, 1);
             this.tblSettingsYMin.Controls.Add(this.lblYMinERROR, 0, 2);
             this.tblSettingsYMin.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblSettingsYMin.Location = new System.Drawing.Point(4, 190);
+            this.tblSettingsYMin.Location = new System.Drawing.Point(4, 210);
             this.tblSettingsYMin.Name = "tblSettingsYMin";
             this.tblSettingsYMin.RowCount = 3;
             this.tblSettingsYMin.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -409,6 +462,30 @@
             this.lblYMinERROR.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.lblYMinERROR.Visible = false;
             // 
+            // tblImportToImg
+            // 
+            this.tblImportToImg.ColumnCount = 1;
+            this.tblImportToImg.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblImportToImg.Controls.Add(this.btnSaveToImg, 0, 0);
+            this.tblImportToImg.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tblImportToImg.Location = new System.Drawing.Point(4, 281);
+            this.tblImportToImg.Name = "tblImportToImg";
+            this.tblImportToImg.RowCount = 1;
+            this.tblImportToImg.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblImportToImg.Size = new System.Drawing.Size(155, 50);
+            this.tblImportToImg.TabIndex = 7;
+            // 
+            // btnSaveToImg
+            // 
+            this.btnSaveToImg.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnSaveToImg.Location = new System.Drawing.Point(3, 3);
+            this.btnSaveToImg.Name = "btnSaveToImg";
+            this.btnSaveToImg.Size = new System.Drawing.Size(149, 23);
+            this.btnSaveToImg.TabIndex = 8;
+            this.btnSaveToImg.Text = "Zapisz";
+            this.btnSaveToImg.UseVisualStyleBackColor = true;
+            this.btnSaveToImg.Click += new System.EventHandler(this.btnSaveToImg_Click);
+            // 
             // FormAdvancedChart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -426,6 +503,8 @@
             this.tblSettingAverage.PerformLayout();
             this.tblSettingData.ResumeLayout(false);
             this.tblSettingData.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.tblSettingYInterval.ResumeLayout(false);
             this.tblSettingYInterval.PerformLayout();
             this.tblYIntervalAuto.ResumeLayout(false);
@@ -438,6 +517,7 @@
             this.tblYMinText.PerformLayout();
             this.tblYMinValue.ResumeLayout(false);
             this.tblYMinValue.PerformLayout();
+            this.tblImportToImg.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -468,5 +548,10 @@
         private System.Windows.Forms.Label lblYMinValueText;
         private System.Windows.Forms.TextBox tboxYMinValue;
         private System.Windows.Forms.Label lblYMinERROR;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.CheckBox cboxDataLine;
+        private System.Windows.Forms.Label lblDataLine;
+        private System.Windows.Forms.TableLayoutPanel tblImportToImg;
+        private System.Windows.Forms.Button btnSaveToImg;
     }
 }

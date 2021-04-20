@@ -24,11 +24,15 @@ namespace Analizator
         /// <summary>
         /// Open and convert file.
         /// </summary>
-        public Data() {
-            this.fileIsOpen = this.OpenFile();
+        public Data(string path, string value)
+        {
+            //this.fileIsOpen = this.OpenFile();
+            this.fileContent = value;
+            this.filePath = path;
+            this.fileIsOpen = true;
             if (this.fileIsOpen == true)
             {
-               // MessageBox.Show("Otwarcie pliku zakończone sukcesem", "Otwarto plik", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // MessageBox.Show("Otwarcie pliku zakończone sukcesem", "Otwarto plik", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.NumberOfLines = this.LineCounter();
                 if (this.NumberOfLines > 0)
                 {
@@ -42,12 +46,16 @@ namespace Analizator
 
 
 
-
+        public string GetFilePath()
+        {
+            return this.filePath;
+        }
 
         /// <summary>
         /// Conversion data from fileContent(string) to tabOfData(double[]).
         /// </summary>
-        private void ConversionContent() {
+        private void ConversionContent()
+        {
             string tmpResult = "";
             int tmpLine = 0;
             bool? onlyOneMinus = null;
@@ -57,50 +65,55 @@ namespace Analizator
                 if (item > 47 && item < 58) tmpResult += item.ToString();
                 //Jeśli to przecinek lub kropka to dodaje przecinek do zmiennej tymczasowej;
                 if (item == 44 || item == 46) tmpResult += ",";
-                if (item == 45) {
+                if (item == 45)
+                {
                     if (onlyOneMinus == null)
                     {
                         onlyOneMinus = true;
                         tmpResult += "-";
                     }
-                    else if (onlyOneMinus == true) {
+                    else if (onlyOneMinus == true)
+                    {
                         onlyOneMinus = false;
                     }
                 }
 
                 //jeśli to średnik to zapisuje zmienną do tablicy
                 if (item == '\n') tmpResult = "";
-                if (item == 59 ) 
+                if (item == 59)
                 {
                     if (tmpResult == "") continue;
-                    if (tmpResult!=",") double.TryParse(tmpResult, out this.tabOfData[tmpLine]);
+                    if (tmpResult != ",") double.TryParse(tmpResult, out this.tabOfData[tmpLine]);
                     tmpResult = "";
                     tmpLine++;
                 }
             }
-        
+
         }
         public double[] GetFileContent()
         {
             return this.tabOfData;
         }
 
-        public string GetFileName() {
+        public string GetFileName()
+        {
             string name = "";
-            for (int i = this.filePath.Length-1; i > 0; i--)
+            for (int i = this.filePath.Length - 1; i > 0; i--)
             {
                 if (this.filePath[i] == '\\') return name;
-                name =  this.filePath[i] + name;
+                name = this.filePath[i] + name;
             }
             return name;
         }
-        public int GetDataLenght() {
+        public int GetDataLenght()
+        {
             return this.NumberOfLines;
         }
         /// <summary>
         /// Calculating how many lines are in the data
         /// </summary>
-        private int LineCounter() {
+        private int LineCounter()
+        {
             int sumOfLines = 0;
             bool digitExist = false;
             foreach (var item in this.fileContent)
@@ -117,24 +130,26 @@ namespace Analizator
 
                 //zaznaczenie że liczba posiada jakąkolwiek cyfrę
                 if (item != 44 || item != 46) digitExist = true;
-                
+
             }
-            
+
             return sumOfLines;
         }
         /// <summary>
         /// Checking if data exists. Exist - true, no exist - false, file did not open - null
         /// </summary>
-        public bool? Exist() {
+        public bool? Exist()
+        {
 
-            if(this.fileContent!=string.Empty && this.NumberOfLines>0) return true;
+            if (this.fileContent != string.Empty && this.NumberOfLines > 0) return true;
             if (this.fileIsOpen == null) return null;
             return false;
         }
         /// <summary>
         /// Min from tabOfData[].
         /// </summary>
-        public double Min() {
+        public double Min()
+        {
             if (this.min != null) return Convert.ToDouble(this.min);
             this.min = this.tabOfData[0];
             for (int i = 1; i < this.NumberOfLines; i++)
@@ -161,7 +176,8 @@ namespace Analizator
         /// <summary>
         /// Variance from tabOfData[].
         /// </summary>
-        public double Variance() {
+        public double Variance()
+        {
             if (this.variance != null) return Convert.ToDouble(this.variance);
             this.variance = 0;
             foreach (var item in this.tabOfData)
@@ -175,7 +191,8 @@ namespace Analizator
         /// <summary>
         /// Average from tabOfData[].
         /// </summary>
-        public double Average() {
+        public double Average()
+        {
             if (this.average != null) return Convert.ToDouble(this.average);
             this.average = 0;
             for (int i = 0; i < this.NumberOfLines; i++)
@@ -186,52 +203,7 @@ namespace Analizator
             return Convert.ToDouble(this.average);
         }
 
-        /// <summary>
-        /// Open .txt file. success - true, error - false, cancel - null.
-        /// </summary>
-        private bool? OpenFile() {
-            
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                try
-                {
-                    openFileDialog.InitialDirectory = "C:\\";
-                    openFileDialog.Filter = "Pliki txt (*.txt) | *.txt";
-                    
-                    if (openFileDialog.ShowDialog() == DialogResult.OK && openFileDialog.FileName != "")
-                    {
-                        // Zapisywanie ścieżki pliku
-                        this.filePath = openFileDialog.FileName;
 
-                        // Wczytywanie pliku do Stream
-                        var fileStream = openFileDialog.OpenFile();
-
-                        using (StreamReader reader = new StreamReader(fileStream))
-                        {
-                            try
-                            {
-                                this.fileContent = reader.ReadToEnd();
-                            }
-                            catch
-                            {
-                                MessageBox.Show("Niewłaściwe dane w pliku", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                return false;
-                            }
-                            fileStream.Close();
-                        }
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                catch {
-                   // MessageBox.Show("Błąd podczas otwierania pliku", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return false;
-                }
-            }
-            return true;
-        }
         /// <summary>
         /// Save results to .txt file, with choice of what save.
         /// </summary>
@@ -261,12 +233,12 @@ namespace Analizator
                         return true;
                     }
                 }
-                catch
+                catch(Exception e)
                 {
-                    MessageBox.Show("Błąd zapisu pliku","ERROR",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                    MessageBox.Show("Błąd zapisu pliku\n"+e.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
-                
+
 
             }
             return true;

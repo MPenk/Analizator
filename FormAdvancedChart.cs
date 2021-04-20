@@ -29,7 +29,7 @@ namespace Analizator
 
             this.data = data;
             this.chart = new SpecialChart(chartFromData, this.data, true);
-            
+
             // Tworzenie list rozwijanych 
             foreach (var item in listSettings)
             {
@@ -41,7 +41,7 @@ namespace Analizator
 
             // Ustawienie wartości minimalnej w textbox
             tboxYMinValue.Text = chart.GetYMin().ToString();
-            lblYMinERROR.Visible = false;      
+            lblYMinERROR.Visible = false;
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Analizator
         /// </summary>
         private void CreateListSettings()
         {
-            listSettings.Add(new SettingsSeries { name = SettingsSeries.settingName.data, cbo = cboData, cbox = cboxData, color = Color.Red, ColorList = CreateColorsList() });
+            listSettings.Add(new SettingsSeries { name = SettingsSeries.settingName.data, cbo = cboData, cbox = cboxData, cbox2 = cboxDataLine, color = Color.Red, ColorList = CreateColorsList() });
             listSettings.Add(new SettingsSeries { name = SettingsSeries.settingName.average, cbo = cboAverage, cbox = cboxAverage, color = Color.Green, ColorList = CreateColorsList() });
         }
 
@@ -95,27 +95,36 @@ namespace Analizator
         /// <summary>
         /// Change visibility 
         /// </summary>
-        private void turnOffSeries(CheckBox obj) {
+        private void turnOffSeries(CheckBox obj)
+        {
 
-            SettingsSeries sender = listSettings.Find(cbox => cbox.cbox  == obj);
-            if(sender.name.ToString()=="data")chart.Visible(sender.name.ToString()+"Point", sender.cbox.Checked);
+            SettingsSeries sender = listSettings.Find(cbox => cbox.cbox == obj);
+            if (sender.cbox2 != null)
+            {
+                sender.cbox2.Enabled = (sender.cbox.Checked == true) ? true : false;
+                sender.cbox2.Checked = true;
+            }
+            if (sender.name.ToString() == "data")
+                chart.Visible(sender.name.ToString() + "Point", sender.cbox.Checked);
             chart.Visible(sender.name.ToString(), sender.cbox.Checked);
             sender.cbo.Enabled = (sender.cbox.Checked == true) ? true : false;
+
         }
 
         private void tboxYInterval_TextChanged(object sender, EventArgs e)
         {
-            SetYInterval(((TextBox)sender).Text);     
+            SetYInterval(((TextBox)sender).Text);
         }
 
-        private void SetYInterval(string value) {
+        private void SetYInterval(string value)
+        {
             double y = 0;
             if (double.TryParse(value, out y))
             {
                 lblYIntervalERROR.Visible = false;
                 chart.SetYInterval(y);
             }
-            else if(value != "") lblYIntervalERROR.Visible = true;
+            else if (value != "") lblYIntervalERROR.Visible = true;
         }
 
         private void cboxYInterval_CheckedChanged(object sender, EventArgs e)
@@ -159,7 +168,7 @@ namespace Analizator
         private void chartFromData_MouseMove(object sender, MouseEventArgs e)
         {
             var pos = e.Location;
-            if (Math.Abs(pos.X - this.prevMousePoint.X)<6 && Math.Abs(pos.Y - this.prevMousePoint.Y) <6) return;
+            if (Math.Abs(pos.X - this.prevMousePoint.X) < 6 && Math.Abs(pos.Y - this.prevMousePoint.Y) < 6) return;
 
             toolTip.RemoveAll();
             var results = chart.GetHitTest(pos.X, pos.Y);
@@ -174,28 +183,72 @@ namespace Analizator
                         double X = result.ChartArea.AxisX.ValueToPixelPosition(prop.XValue);
                         double Y = result.ChartArea.AxisY.ValueToPixelPosition(prop.YValues[0]);
 
-                        if (Math.Abs(pos.X - X) < 7 && Math.Abs(pos.Y - Y) <7)
+                        if (Math.Abs(pos.X - X) < 7 && Math.Abs(pos.Y - Y) < 7)
                         {
-                            toolTip.Show("Y=" + prop.YValues[0], chart.GetChart(), pos.X+5, pos.Y-17 );
+                            toolTip.Show("Y=" + prop.YValues[0], chart.GetChart(), pos.X + 5, pos.Y - 17);
                         }
                     }
                 }
             }
         }
 
+        private void tblSettingData_Paint(object sender, PaintEventArgs e)
+        {
 
+        }
+
+        private void cboxDataLine_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox obj = (CheckBox)sender;
+            SettingsSeries setting = listSettings.Find(cbox2 => cbox2.cbox2 == obj);
+            chart.Visible(setting.name.ToString(), setting.cbox2.Checked);
+            chart.IsVisibleInLegend(setting.name.ToString() + "Point", !setting.cbox2.Checked);
+        }
+
+        private void btnSaveToImg_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                try
+                {
+                    saveFileDialog.FileName = System.IO.Path.GetFileNameWithoutExtension(data.GetFilePath())+".png";
+                    saveFileDialog.Filter = "Pliki txt (*.png) | *.png";
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK && saveFileDialog.FileName != "")
+                    {
+
+
+                        chart.SaveToImg(saveFileDialog.FileName);
+
+                        // Wczytywanie pliku do Stream
+
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Błąd zapisu pliku\n" + ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            
+        }
     }
 
 
 
-    class SettingsSeries {
+    class SettingsSeries
+    {
         public enum settingName
         {
             data,
             average
         }
         public settingName name { get; set; }
-        public CheckBox cbox{ get; set; }
+        public CheckBox cbox { get; set; }
+        public CheckBox cbox2 { get; set; }
         public ComboBox cbo { get; set; }
         public Color color { get; set; }
         public List<Colors> ColorList { get; set; }
