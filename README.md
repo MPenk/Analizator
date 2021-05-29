@@ -1,7 +1,7 @@
 # Analizator
 Program do analizowania danych.
 
-###Przykładowe dane
+### Przykładowe dane
 ```
 Wyniki pomiarów;
 1.9403133731545503;
